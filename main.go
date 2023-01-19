@@ -105,9 +105,9 @@ func main() {
 	}
 
 	if result.Valid() {
-		fmt.Printf("The document is valid\n")
+		fmt.Printf("The output file is valid\n")
 	} else {
-		fmt.Printf("The document is not valid. see errors :\n")
+		fmt.Printf("The output file is not valid. see errors :\n")
 		for _, desc := range result.Errors() {
 			fmt.Printf("- %s\n", desc)
 		}
