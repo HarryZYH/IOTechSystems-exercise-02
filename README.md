@@ -23,6 +23,6 @@ This is a solution to exercise02 in [IOTech Coding Exercises](https://github.com
     
 3. You should see a [`output.json`](./output.json) file generated and two following messages displyed in the terminal.
   - "Ouput written to output.json"
-    Verifing the answers are written into the file.
+    Verify the answers are written into the file.
   - "The output file is valid"
-    Verifing that the output is following the schema in [`schema.json`](./output-schema/schema.json)
+    Verify that the output is following the schema in [`schema.json`](./output-schema/schema.json)
