@@ -21,7 +21,7 @@ This is a solution to exercise02 in [IOTech Coding Exercises](https://github.com
     ./solution
     ```
     
-3. You should see a [`output.json`](./output.json) file generated and two lines displyed in the terminal.
+3. You should see a [`output.json`](./output.json) file generated and two following messages displyed in the terminal.
   - "Ouput written to output.json"
     Verifing the answers are written into the file.
   - "The output file is valid"
