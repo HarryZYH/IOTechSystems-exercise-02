@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/xeipuuv/gojsonschema"
@@ -59,7 +60,7 @@ func main() {
 	var valueTotal int
 	var uuids []string
 	for _, device := range validDevices {
-		// decode value
+		// decode value base64
 		valueBytes, err := base64.StdEncoding.DecodeString(device.Value)
 		if err != nil {
 			fmt.Println(err)
@@ -73,8 +74,9 @@ func main() {
 		}
 		valueTotal += currentValue
 
-		// parse uuid from info field
-		uuid := device.Info[len("A Modbus device uuid:") : len("A Modbus device uuid:")+36]
+		// get uuid
+		s := strings.Index(device.Info, ":")
+		uuid := device.Info[s+1 : s+37]
 		uuids = append(uuids, uuid)
 	}
 
@@ -95,19 +97,19 @@ func main() {
 
 	// validate output file format with provided JSON schema
 	schemaLoader := gojsonschema.NewReferenceLoader("file://./output-schema/schema.json")
-    outputLoader := gojsonschema.NewReferenceLoader("file://./output.json")
+	outputLoader := gojsonschema.NewReferenceLoader("file://./output.json")
 
 	result, err := gojsonschema.Validate(schemaLoader, outputLoader)
-    if err != nil {
-        panic(err.Error())
-    }
+	if err != nil {
+		panic(err.Error())
+	}
 
-    if result.Valid() {
-        fmt.Printf("The document is valid\n")
-    } else {
-        fmt.Printf("The document is not valid. see errors :\n")
-        for _, desc := range result.Errors() {
-            fmt.Printf("- %s\n", desc)
-        }
-    }
+	if result.Valid() {
+		fmt.Printf("The document is valid\n")
+	} else {
+		fmt.Printf("The document is not valid. see errors :\n")
+		for _, desc := range result.Errors() {
+			fmt.Printf("- %s\n", desc)
+		}
+	}
 }
