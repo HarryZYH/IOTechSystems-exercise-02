@@ -8,7 +8,7 @@ This is a solution to exercise02 in [IOTech Coding Exercises](https://github.com
     ```
 2. Pull the repository to local. Open a terminal and naviaget to the directory where you saved the file.
     ```sh
-    cd IOTechSystems-exercises-02
+    cd IOTechSystems-exercise-02
     ```
 
   - To run
