@@ -29,6 +29,34 @@ type Output struct {
 	UUIDS      []string `json:"UUIDS"`
 }
 
+func IsBefore(d *Device) bool {
+	deviceTimeInt64, err := strconv.ParseInt(d.Timestamp, 10, 64)
+	if err != nil {
+		panic(err)
+	}
+	return deviceTimeInt64 < time.Now().Unix()
+}
+
+func GetUuid(d *Device) string {
+	start := strings.Index(d.Info, ":")
+	end := strings.Index(d.Info, ",")
+	uuid := d.Info[start+1 : end]
+	return uuid
+}
+
+func DecodeValue(d *Device) int {
+	valueBytes, err := base64.StdEncoding.DecodeString(d.Value)
+	if err != nil {
+		panic(err)
+	}
+	value := string(valueBytes)
+	currentValue, err := strconv.Atoi(value)
+	if err != nil {
+		panic(err)
+	}
+	return currentValue
+}
+
 func main() {
 	// parse data from data.json
 	dataBytes, err := os.ReadFile("./data/data.json")
@@ -43,15 +71,9 @@ func main() {
 	}
 
 	// discard the devices where the timestamp value is before the current time
-	currentTime := time.Now().Unix()
 	var validDevices []Device
 	for _, device := range data.Devices {
-		deviceTimeInt64, err := strconv.ParseInt(device.Timestamp, 10, 64)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		if deviceTimeInt64 > currentTime {
+		if !IsBefore(&device) {
 			validDevices = append(validDevices, device)
 		}
 	}
@@ -60,24 +82,11 @@ func main() {
 	var valueTotal int
 	var uuids []string
 	for _, device := range validDevices {
-		// decode value base64
-		valueBytes, err := base64.StdEncoding.DecodeString(device.Value)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		value := string(valueBytes)
-		currentValue, err := strconv.Atoi(value)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		valueTotal += currentValue
+		// decode base64
+		valueTotal += DecodeValue(&device)
 
 		// get uuid
-		s := strings.Index(device.Info, ":")
-		uuid := device.Info[s+1 : s+37]
-		uuids = append(uuids, uuid)
+		uuids = append(uuids, GetUuid(&device))
 	}
 
 	// create output

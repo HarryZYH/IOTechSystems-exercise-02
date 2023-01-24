@@ -26,3 +26,9 @@ This is a solution to exercise02 in [IOTech Coding Exercises](https://github.com
     Verify the answers are written into the file.
   - "The output file is valid"
     Verify that the output is following the schema in [`schema.json`](./output-schema/schema.json)
+
+## Test
+1. Run the test cases by running the following command.
+    ```sh
+    go test
+    ```
